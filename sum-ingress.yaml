@@ -1,0 +1,29 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: sum-ingress
+  namespace: sum
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: a3e5c8d8fa14743f69b59f8866b770d2-765443339.ap-south-1.elb.amazonaws.com #load balancer ip
+  # here in ingtress rull we are saying that if any reqest comes path "/" send it fronend-service
+  # and any request comes to "/sum" send to backend-service so we have to the link in frontend.py
+  # where fronend will communicate to backend by ingress loadbalancer "DNA/sum" path. Because 
+  # here we are saying "/sum" will be go to backend 
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: frontend-service
+            port:
+              number: 80
+      - path: /sum
+        pathType: Prefix
+        backend:
+          service:
+            name: backend-service
+            port:
+              number: 80
